@@ -132,7 +132,7 @@ function FallbackCalculator() {
         Evaluate
       </button>
       {out ? (
-        <p className="rounded-lg bg-cb-panel px-4 py-3 font-serif text-[20px]">
+        <p className="rounded-lg bg-cb-panel px-4 py-3 cb-prose-math text-[20px]">
           {out}
         </p>
       ) : null}

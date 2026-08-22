@@ -91,7 +91,7 @@ export default function ResultsPage() {
     <main className="min-h-screen bg-cb-panel pb-20">
       <header className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/home" className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-cb-blue text-[13px] font-bold text-white">
               BB
             </div>
@@ -415,7 +415,7 @@ export default function ResultsPage() {
           >
             Take another test
           </button>
-          <Link href="/" className="cb-btn-outline">
+          <Link href="/home" className="cb-btn-outline">
             Return to Home
           </Link>
         </div>

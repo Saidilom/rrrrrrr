@@ -19,6 +19,7 @@ module.exports = {
           gray: "#505050",
           line: "#B3B3B3",
           panel: "#F8F8F8",
+          chrome: "#EAEFFB",
         },
       },
       fontFamily: {

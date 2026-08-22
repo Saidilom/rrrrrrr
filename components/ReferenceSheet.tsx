@@ -25,7 +25,7 @@ export default function ReferenceSheet() {
             <p className="mb-1.5 text-[13px] font-semibold uppercase tracking-wide text-cb-gray">
               {f.label}
             </p>
-            <p className="font-serif text-[18px]">{f.body}</p>
+            <p className="cb-prose-math text-[18px]">{f.body}</p>
           </div>
         ))}
       </div>

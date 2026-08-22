@@ -188,7 +188,7 @@ export default function CheckInPage() {
             <HelpIcon />
             Help
           </button>
-          <Link href="/" className="flex items-center gap-2.5 text-[17px] font-medium">
+          <Link href="/home" className="flex items-center gap-2.5 text-[17px] font-medium">
             Return to Home
             <HomeIcon />
           </Link>
@@ -569,7 +569,7 @@ export default function CheckInPage() {
           <HelpIcon />
           Help
         </button>
-        <Link href="/" className="flex items-center gap-2.5 text-[17px] font-medium">
+        <Link href="/home" className="flex items-center gap-2.5 text-[17px] font-medium">
           Return to Home
           <HomeIcon />
         </Link>
@@ -589,7 +589,7 @@ export default function CheckInPage() {
               Back
             </button>
           ) : (
-            <Link href="/" className="cb-btn-outline px-12">
+            <Link href="/home" className="cb-btn-outline px-12">
               Exit
             </Link>
           )}

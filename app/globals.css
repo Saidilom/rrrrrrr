@@ -38,11 +38,39 @@ body {
   }
 }
 
-/* Passage / stem body copy inside the test */
+/* Perforated tear-line, like the divider strips in the real Bluebook app */
+.cb-tear-line {
+  background-image: repeating-linear-gradient(
+    to right,
+    #3a9d6e 0,
+    #3a9d6e 20px,
+    transparent 20px,
+    transparent 24px,
+    #3a6df0 24px,
+    #3a6df0 44px,
+    transparent 44px,
+    transparent 48px,
+    #f0a83a 48px,
+    #f0a83a 68px,
+    transparent 68px,
+    transparent 72px
+  );
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+/* Passage / stem body copy inside the test — Reading and Writing */
 .cb-prose {
+  font-family: "Latin Modern Text", Georgia, Cambria, "Times New Roman", serif;
   font-size: 17px;
   line-height: 1.65;
   color: #1e1e1e;
+}
+
+/* Math questions, formulas and the calculator readout */
+.cb-prose-math {
+  font-family: "Latin Modern Math", "Cambria Math", "STIX Two Math", Georgia,
+    serif;
 }
 .cb-prose p + p {
   margin-top: 1em;

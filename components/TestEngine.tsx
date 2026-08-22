@@ -61,6 +61,16 @@ function ClockIcon() {
   );
 }
 
+function BatteryIcon() {
+  return (
+    <svg viewBox="0 0 26 14" className="h-3.5 w-6" fill="none">
+      <rect x="1" y="1" width="21" height="12" rx="2.5" stroke="white" strokeWidth="1.3" />
+      <rect x="23.3" y="4.3" width="2" height="5.4" rx="1" fill="white" />
+      <rect x="3" y="3" width="15.5" height="8" rx="1.2" fill="white" />
+    </svg>
+  );
+}
+
 function Caret({ up }: { up?: boolean }) {
   return (
     <svg
@@ -134,13 +144,34 @@ export default function TestEngine() {
   const [crossOutMode, setCrossOutMode] = useState(false);
   const [highlightMode, setHighlightMode] = useState(false);
   const [confirmSubmit, setConfirmSubmit] = useState(false);
+  const [splitPct, setSplitPct] = useState(50);
 
   const passageRef = useRef<HTMLDivElement | null>(null);
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  const draggingRef = useRef(false);
+
+  const handleDividerPointerDown = useCallback((e: React.PointerEvent) => {
+    draggingRef.current = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  }, []);
+
+  const handleDividerPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!draggingRef.current || !mainRef.current) return;
+    const rect = mainRef.current.getBoundingClientRect();
+    const pct = ((e.clientX - rect.left) / rect.width) * 100;
+    setSplitPct(Math.min(75, Math.max(25, pct)));
+  }, []);
+
+  const handleDividerPointerUp = useCallback((e: React.PointerEvent) => {
+    draggingRef.current = false;
+    (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+  }, []);
 
   const testModule = MODULES[moduleIndex];
   const questions = testModule.questions;
   const question = questions[Math.min(qIndex, questions.length - 1)];
   const isMath = testModule.section === "math";
+  const proseClass = isMath ? "cb-prose cb-prose-math" : "cb-prose";
 
   /* ------------------------------------------------------- hydration */
 
@@ -415,28 +446,63 @@ export default function TestEngine() {
   /* ---- break ---- */
   if (phase === "break") {
     return (
-      <div className="flex h-screen flex-col bg-white">
-        <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-          <p className="text-[15px] font-semibold uppercase tracking-widest text-cb-gray">
-            Practice Test
-          </p>
-          <h1 className="mt-3 text-[44px] font-normal">Break</h1>
-          <p className="mt-8 text-[17px]">Remaining Break Time</p>
-          <p className="mt-2 font-mono text-[64px] font-medium tabular-nums">
-            {fmt(breakSecondsLeft)}
-          </p>
-          <div className="mt-10 max-w-xl space-y-3 text-[15px] leading-relaxed text-cb-gray">
-            <p>
-              You may leave your desk. Do not open any other application — the
-              focus penalty is paused during the break, but your next module
-              begins automatically when the timer reaches zero.
-            </p>
-            <p>Section 2, Module 1: Math is next.</p>
-          </div>
-          <button className="cb-btn-blue mt-10 px-10" onClick={startNextModule}>
-            Resume Testing
-          </button>
+      <div
+        className="relative flex h-screen flex-col bg-[#1e1e1e] text-white"
+        style={{
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif',
+        }}
+      >
+        <div className="absolute right-6 top-6 flex items-center gap-1.5 rounded-md bg-[#3a3a3a] px-3 py-1.5 text-[13px] font-semibold">
+          <span>85%</span>
+          <BatteryIcon />
         </div>
+
+        <div className="flex flex-1 items-center justify-center px-10 py-10">
+          <div className="flex w-full max-w-5xl flex-col items-center gap-10 md:flex-row md:gap-16">
+            <div className="flex w-full max-w-[300px] shrink-0 flex-col items-center gap-8">
+              <div className="flex w-full flex-col items-center rounded-xl border border-[#5a5a5a] bg-[#1e1e1e] px-8 py-6 text-center text-white">
+                <p className="text-[19px] font-bold">Remaining Break Time:</p>
+                <p className="mt-3 text-[58px] font-bold tabular-nums">
+                  {fmt(breakSecondsLeft)}
+                </p>
+              </div>
+              <button className="cb-btn-yellow px-10" onClick={startNextModule}>
+                Resume Testing
+              </button>
+            </div>
+
+            <div className="max-w-2xl">
+              <h1 className="text-[38px] font-bold leading-tight">
+                Take a Break: Do Not Close Your Device
+              </h1>
+              <p className="mt-6 text-[17px] leading-relaxed text-white/90">
+                After the break, a <strong>Resume Testing Now</strong> button
+                will appear and you&rsquo;ll start the next section.
+              </p>
+              <p className="mt-6 text-[17px] font-bold">
+                Follow these rules during the break:
+              </p>
+              <ol className="mt-3 list-decimal space-y-3 pl-5 text-[17px] leading-relaxed text-white/90">
+                <li>Do not disturb students who are still testing.</li>
+                <li>Do not exit the app or close your laptop.</li>
+                <li>
+                  Do not access phones, smartwatches, textbooks, notes, or the
+                  internet.
+                </li>
+                <li>Do not eat or drink near any testing device.</li>
+                <li>
+                  Do not speak in the test room; outside the test room, do not
+                  discuss the exam with anyone.
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <p className="absolute bottom-6 left-6 text-[17px] font-bold">
+          {displayName(session)}
+        </p>
       </div>
     );
   }
@@ -470,7 +536,8 @@ export default function TestEngine() {
   const headerTitle = testModule.title;
 
   const header = (
-    <header className="grid h-[84px] shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b-2 border-dashed border-gray-300 bg-white px-6">
+    <header className="relative grid h-[84px] shrink-0 grid-cols-[1fr_auto_1fr] items-center bg-cb-chrome px-6">
+      <div className="cb-tear-line absolute inset-x-0 bottom-0 h-[2.5px]" aria-hidden="true" />
       <div>
         <p className="text-[17px] font-semibold">{headerTitle}</p>
         <button
@@ -484,13 +551,12 @@ export default function TestEngine() {
 
       <div className="flex flex-col items-center">
         {timerHidden ? (
-          <div className="flex items-center gap-2 text-cb-ink">
+          <div className="flex items-center justify-center text-cb-ink">
             <ClockIcon />
-            <span className="text-[17px]">Timer hidden</span>
           </div>
         ) : (
           <p
-            className={`font-mono text-[26px] font-medium tabular-nums ${
+            className={`text-[26px] font-medium tabular-nums ${
               secondsLeft <= 60 ? "text-[#C13030]" : ""
             }`}
             aria-live="off"
@@ -500,7 +566,7 @@ export default function TestEngine() {
         )}
         <button
           onClick={() => setTimerHidden((h) => !h)}
-          className="mt-0.5 rounded-full border border-cb-ink px-3.5 py-0.5 text-[13px] font-medium transition hover:bg-gray-100"
+          className="mt-1 rounded-full border border-cb-ink px-3.5 py-0.5 text-[13px] font-medium transition hover:bg-gray-100"
         >
           {timerHidden ? "Show" : "Hide"}
         </button>
@@ -582,7 +648,8 @@ export default function TestEngine() {
   );
 
   const footer = (
-    <footer className="relative flex h-[92px] shrink-0 items-center border-t-2 border-dashed border-gray-300 bg-white px-6">
+    <footer className="relative flex h-[92px] shrink-0 items-center bg-cb-chrome px-6">
+      <div className="cb-tear-line absolute inset-x-0 top-0 h-[2.5px]" aria-hidden="true" />
       <p className="w-[280px] truncate text-[17px] font-semibold">
         {displayName(session)}
       </p>
@@ -591,10 +658,10 @@ export default function TestEngine() {
         {phase === "testing" ? (
           <button
             onClick={() => setNavOpen((o) => !o)}
-            className="flex items-center gap-2 rounded-md bg-[#1E1E1E] px-4 py-2 text-[15px] font-medium text-white transition hover:bg-black"
+            className="flex items-center gap-2 rounded-md bg-[#1E1E1E] px-5 py-2.5 text-[16px] font-medium text-white transition hover:bg-black"
           >
             Question {qIndex + 1} of {questions.length}
-            <Caret up={navOpen} />
+            <Caret up={!navOpen} />
           </button>
         ) : (
           <p className="text-[16px] font-semibold">Check Your Work</p>
@@ -742,7 +809,7 @@ export default function TestEngine() {
             title="Directions"
           >
             <div
-              className="cb-prose"
+              className={proseClass}
               dangerouslySetInnerHTML={{
                 __html: isMath ? MATH_DIRECTIONS : RW_DIRECTIONS,
               }}
@@ -760,48 +827,56 @@ export default function TestEngine() {
 
   const questionBlock = (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-3 border-b border-gray-200 bg-cb-panel px-5 py-2.5">
-        <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[4px] bg-[#1E1E1E] text-[15px] font-semibold text-white">
+      <div className="relative mx-6 flex h-[34px] items-center gap-3 bg-[#EFEFEF]">
+        <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center bg-[#1E1E1E] text-[15px] font-semibold text-white">
           {qIndex + 1}
         </span>
         <button
           onClick={() =>
             setFlags((f) => ({ ...f, [question.id]: !f[question.id] }))
           }
-          className={`flex items-center gap-1.5 text-[14px] font-medium ${
-            flags[question.id] ? "text-[#C13030]" : "text-cb-ink"
-          }`}
+          className="flex items-center gap-1.5 text-[14px] font-medium text-cb-ink"
         >
-          <FlagIcon filled={!!flags[question.id]} />
+          <FlagIcon
+            filled={!!flags[question.id]}
+            className={flags[question.id] ? "text-[#C13030]" : ""}
+          />
           Mark for Review
         </button>
-        <div className="flex-1" />
         {question.type === "mc" ? (
           <button
             onClick={() => setCrossOutMode((c) => !c)}
             aria-pressed={crossOutMode}
-            className={`rounded-md border px-2.5 py-1 text-[13px] font-bold transition ${
+            className={`absolute right-3 top-1/2 flex h-[26px] w-[26px] -translate-y-1/2 items-center justify-center rounded-[4px] border text-[10px] font-bold transition ${
               crossOutMode
                 ? "border-cb-blue bg-cb-blue text-white"
                 : "border-cb-ink text-cb-ink hover:bg-gray-100"
             }`}
             title="Answer eliminator"
           >
-            <span className="line-through">ABC</span>
+            <span className="relative inline-flex items-center">
+              ABC
+              <span className="pointer-events-none absolute left-[-3px] right-[-3px] top-1/2 h-[1.5px] -translate-y-1/2 -rotate-[18deg] bg-current" />
+            </span>
           </button>
         ) : null}
       </div>
+      <div className="cb-tear-line mx-6 h-[2.5px]" />
 
-      <div className="flex-1 overflow-y-auto px-6 py-6">
+      <div
+        className={`flex-1 overflow-y-auto px-6 pb-6 ${
+          isMath ? "pt-10" : "pt-4"
+        }`}
+      >
         {isMath && question.stimulus ? (
           <div
-            className="cb-prose mb-5"
+            className={`${proseClass} mb-5`}
             dangerouslySetInnerHTML={{ __html: question.stimulus }}
           />
         ) : null}
 
         <div
-          className="cb-prose mb-6 font-medium"
+          className={`${proseClass} mb-6 font-medium`}
           dangerouslySetInnerHTML={{ __html: question.prompt }}
         />
 
@@ -815,25 +890,25 @@ export default function TestEngine() {
                   <button
                     onClick={() => setChoice(question.id, c.label)}
                     className={[
-                      "flex flex-1 items-center gap-4 rounded-lg border-2 px-4 py-3 text-left transition",
+                      "flex flex-1 items-center gap-4 rounded-lg px-4 py-3 text-left transition",
                       selected
-                        ? "border-cb-blue bg-[#F4F6FF]"
-                        : "border-gray-300 bg-white hover:border-gray-400",
+                        ? "border-[3px] border-cb-blue bg-white"
+                        : "border border-gray-300 bg-white hover:border-gray-400",
                       isCrossed ? "cb-crossed" : "",
                     ].join(" ")}
                   >
                     <span
                       className={[
-                        "flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full border-2 text-[15px] font-semibold",
+                        "flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full border-[2.5px] text-[15px] font-semibold",
                         selected
                           ? "border-cb-blue bg-cb-blue text-white"
-                          : "border-cb-ink text-cb-ink",
+                          : "border-[#7A7A7A] text-cb-gray",
                       ].join(" ")}
                     >
                       {c.label}
                     </span>
                     <span
-                      className="cb-prose flex-1"
+                      className={`${proseClass} flex-1`}
                       dangerouslySetInnerHTML={{ __html: c.text }}
                     />
                   </button>
@@ -849,7 +924,10 @@ export default function TestEngine() {
                       {isCrossed ? (
                         <span className="text-[11px]">undo</span>
                       ) : (
-                        <span className="line-through">{c.label}</span>
+                        <span className="relative flex items-center justify-center">
+                          {c.label}
+                          <span className="absolute inset-x-[5px] top-1/2 h-[1.5px] -translate-y-1/2 -rotate-[18deg] bg-cb-ink" />
+                        </span>
                       )}
                     </button>
                   ) : null}
@@ -868,7 +946,7 @@ export default function TestEngine() {
             />
             <p className="mt-3 text-[14px] text-cb-gray">
               Answer preview:{" "}
-              <span className="font-serif text-[17px] text-cb-ink">
+              <span className="cb-prose-math text-[17px] text-cb-ink">
                 {answers[question.id]?.spr?.trim() || "—"}
               </span>
             </p>
@@ -882,14 +960,17 @@ export default function TestEngine() {
     <div className="flex h-screen flex-col bg-white">
       {header}
 
-      <main className="flex min-h-0 flex-1">
+      <main ref={mainRef} className="flex min-h-0 flex-1">
         {isMath ? (
-          <div className="mx-auto flex w-full max-w-3xl flex-col">
+          <div className="mx-auto flex w-full max-w-3xl flex-col pt-6">
             {questionBlock}
           </div>
         ) : (
           <>
-            <section className="min-w-0 flex-1 overflow-y-auto border-r-2 border-gray-300 px-8 py-7">
+            <section
+              style={{ flex: `0 1 ${splitPct}%` }}
+              className="min-w-0 overflow-y-auto px-8 py-7"
+            >
               {highlightMode ? (
                 <p className="mb-4 inline-flex items-center gap-2 rounded-md bg-[#FFF8DC] px-3 py-1.5 text-[13px] font-medium">
                   Highlighting on — select text to highlight, click a highlight
@@ -904,7 +985,36 @@ export default function TestEngine() {
                 dangerouslySetInnerHTML={{ __html: stimulusHtml }}
               />
             </section>
-            <section className="min-w-0 flex-1">{questionBlock}</section>
+
+            <div
+              onPointerDown={handleDividerPointerDown}
+              onPointerMove={handleDividerPointerMove}
+              onPointerUp={handleDividerPointerUp}
+              role="separator"
+              aria-orientation="vertical"
+              aria-label="Resize passage and question panes"
+              className="relative z-10 w-[14px] shrink-0 cursor-col-resize touch-none select-none"
+            >
+              <div className="pointer-events-none absolute inset-y-0 left-1/2 w-[4px] -translate-x-1/2 bg-gray-400" />
+              <div className="pointer-events-none absolute left-1/2 top-[20%] flex h-7 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-none bg-[#1E1E1E]">
+                <svg
+                  viewBox="0 0 16 28"
+                  className="h-3 w-[9px]"
+                  fill="white"
+                  preserveAspectRatio="none"
+                >
+                  <polygon points="6,2 6,26 0,14" />
+                  <polygon points="10,2 10,26 16,14" />
+                </svg>
+              </div>
+            </div>
+
+            <section
+              style={{ flex: `0 1 ${100 - splitPct}%` }}
+              className="min-w-0 px-6 pt-6"
+            >
+              {questionBlock}
+            </section>
           </>
         )}
       </main>
@@ -951,7 +1061,7 @@ export default function TestEngine() {
         title="Directions"
       >
         <div
-          className="cb-prose"
+          className={proseClass}
           dangerouslySetInnerHTML={{
             __html: isMath ? MATH_DIRECTIONS : RW_DIRECTIONS,
           }}

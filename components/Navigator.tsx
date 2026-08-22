@@ -9,8 +9,17 @@ export interface QuestionStatus {
 
 function LocationPin({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={`h-4 w-4 ${className}`} fill="currentColor">
-      <path d="M12 2c-3.9 0-7 3-7 6.8 0 5 6.2 12.4 6.5 12.7a.7.7 0 001 0C12.8 21.2 19 13.8 19 8.8 19 5 15.9 2 12 2zm0 9.4a2.6 2.6 0 110-5.2 2.6 2.6 0 010 5.2z" />
+    <svg
+      viewBox="0 0 24 24"
+      className={`h-5 w-5 ${className}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="10.5" r="3" />
+      <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
     </svg>
   );
 }
@@ -28,10 +37,10 @@ export function FlagIcon({
       className={`h-[18px] w-[18px] ${className}`}
       fill={filled ? "currentColor" : "none"}
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="1.6"
       strokeLinejoin="round"
     >
-      <path d="M6 21V4.5M6 4.5h11.5l-2.2 3.6 2.2 3.6H6" />
+      <path d="M6.5 4h11v16.5l-5.5-3.2-5.5 3.2V4z" />
     </svg>
   );
 }
@@ -61,11 +70,31 @@ export default function Navigator({
     <>
       <div className="fixed inset-0 z-40" onMouseDown={onClose} aria-hidden />
       <div className="absolute bottom-[92px] left-1/2 z-50 w-[560px] -translate-x-1/2 rounded-xl border border-gray-300 bg-white p-6 shadow-2xl">
-        <p className="text-center text-[15px] font-semibold">{title}</p>
+        <div className="relative">
+          <p className="px-8 text-center text-[20px] font-semibold leading-snug">
+            {title}
+            <br />
+            Questions
+          </p>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute right-0 top-0 rounded p-1 text-cb-gray transition hover:bg-gray-100"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+              <path
+                d="M6 6l12 12M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
 
         <div className="mt-4 flex items-center justify-center gap-7 border-b border-gray-200 pb-4 text-[13px] text-cb-gray">
           <span className="flex items-center gap-1.5">
-            <LocationPin className="text-cb-blue" />
+            <LocationPin className="text-cb-ink" />
             Current
           </span>
           <span className="flex items-center gap-1.5">
@@ -95,7 +124,7 @@ export default function Navigator({
                 }${st.flagged ? ", marked for review" : ""}`}
               >
                 {isCurrent ? (
-                  <LocationPin className="absolute -top-[13px] text-cb-blue" />
+                  <LocationPin className="absolute -top-[16px] h-[18px] w-[18px] text-cb-ink" />
                 ) : null}
                 {st.flagged ? (
                   <FlagIcon
@@ -105,13 +134,16 @@ export default function Navigator({
                 ) : null}
                 <span
                   className={[
-                    "flex h-[34px] w-[34px] items-center justify-center rounded-[4px] text-[15px] font-medium",
+                    "relative flex h-[34px] w-[34px] items-center justify-center rounded-none border bg-white text-[15px] font-medium",
                     st.answered
-                      ? "bg-cb-blue text-white"
-                      : "border border-dashed border-cb-gray bg-white text-cb-ink",
+                      ? "border-cb-blue text-cb-blue"
+                      : "border-dashed border-cb-gray text-cb-blue",
                   ].join(" ")}
                 >
                   {i + 1}
+                  {isCurrent ? (
+                    <span className="absolute bottom-[3px] left-1/2 h-[2px] w-[16px] -translate-x-1/2 bg-cb-blue" />
+                  ) : null}
                 </span>
               </button>
             );
