@@ -6,15 +6,7 @@ import { MODULES } from "@/lib/test";
 const totalQuestions = MODULES.reduce((n, m) => n + m.questions.length, 0);
 
 function BluebookMark({ className = "h-6 w-6" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" className={className} fill="currentColor">
-      <path
-        d="M17 1L20.2 11.6L31 15L20.2 18.4L17 29L13.8 18.4L3 15L13.8 11.6Z"
-        transform="rotate(-16 17 15)"
-      />
-      <path d="M8 13.5L10.2 18.7L15.5 21L10.2 23.3L8 29.5L5.8 23.3L0.5 21L5.8 18.7Z" />
-    </svg>
-  );
+  return <img src="/bluebook-star-blue.png" alt="" className={`${className} object-contain`} />;
 }
 
 function PersonIcon() {
@@ -89,13 +81,7 @@ function SegmentedToggle() {
   );
 }
 
-const today = new Date();
-const dateStr = today.toLocaleDateString("en-US", {
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
+const dateStr = "Sat, Sep 12, 2026";
 const firstName = "Behruz";
 
 export default function Home() {
@@ -105,7 +91,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-col gap-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <BluebookMark className="h-6 w-6 text-cb-blue" />
+              <BluebookMark className="h-6 w-6" />
               <span className="text-[22px] font-extrabold tracking-tight text-cb-blue">
                 Bluebook
               </span>
@@ -121,7 +107,7 @@ export default function Home() {
           </div>
 
           <h1 className="text-[34px] font-semibold leading-tight text-cb-blue sm:text-[42px]">
-            Welcome, {firstName}. Good luck on test day!
+            Good luck, {firstName}!
           </h1>
         </div>
       </header>
@@ -140,7 +126,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="rounded-2xl bg-cb-panel p-8">
+        <div className="max-w-md rounded-2xl bg-cb-panel p-8 shadow-md">
           <h3 className="text-[26px] font-bold">SAT</h3>
 
           <div className="mt-5 grid gap-x-10 gap-y-6 sm:grid-cols-2">
@@ -182,8 +168,8 @@ export default function Home() {
 
           <div className="mt-6 space-y-1 text-[15px]">
             <p className="font-bold">Lincoln High School</p>
-            <p>100 Main Street</p>
-            <p>Springfield</p>
+            <p>Buyuk Ipak Yuli, 1-2</p>
+            <p>Mirzo Ulugbek District, Tashkent</p>
           </div>
 
           <div className="mt-6">

@@ -7,7 +7,7 @@ import CodeInput from "@/components/CodeInput";
 import { MODULES } from "@/lib/test";
 import { clearAll, saveSession } from "@/lib/session";
 
-const TOTAL_STEPS = 10;
+const TOTAL_STEPS = 9;
 
 /* ------------------------------------------------------------------ chrome */
 
@@ -152,31 +152,27 @@ export default function CheckInPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [agreed, setAgreed] = useState(false);
-  const [roomCode, setRoomCode] = useState("");
   const [startCode, setStartCode] = useState("");
   const [showDirections, setShowDirections] = useState(false);
 
-  const roomComplete = roomCode.length === 5;
   const startComplete = startCode.length === 6;
 
   const canAdvance = useMemo(() => {
     if (step === 1) return firstName.trim().length > 0 && lastName.trim().length > 0;
     if (step === 2) return agreed;
-    if (step === 3) return roomComplete;
     return true;
-  }, [step, firstName, lastName, agreed, roomComplete]);
+  }, [step, firstName, lastName, agreed]);
 
   const beginTest = useCallback(() => {
     clearAll();
     saveSession({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
-      roomCode,
       startCode,
       startedAt: Date.now(),
     });
     router.push("/test");
-  }, [firstName, lastName, roomCode, startCode, router]);
+  }, [firstName, lastName, startCode, router]);
 
   /* --------------------------------------------------------- start code */
 
@@ -360,42 +356,6 @@ export default function CheckInPage() {
       case 3:
         return (
           <>
-            <StepTitle title="Room Code">
-              <p>Enter your room code now to complete check-in.</p>
-              <p>
-                The room code contains{" "}
-                <strong className="font-semibold">letters only</strong>.
-              </p>
-            </StepTitle>
-
-            <div className="mt-6 flex h-8 items-center justify-center">
-              {roomComplete ? (
-                <p className="flex items-center gap-2.5 text-[17px] font-semibold text-cb-green">
-                  <CheckCircle className="text-cb-green" />
-                  Success! Click the Next button to complete check-in.
-                </p>
-              ) : null}
-            </div>
-
-            <div className="mt-4">
-              <CodeInput
-                length={5}
-                mode="letters"
-                value={roomCode}
-                onChange={setRoomCode}
-                autoFocus
-                label="Room code"
-              />
-            </div>
-            <p className="mt-8 text-center text-[14px] text-cb-gray">
-              Any five letters will be accepted in this practice build.
-            </p>
-          </>
-        );
-
-      case 4:
-        return (
-          <>
             <StepTitle title="Device Check">
               <p>We&rsquo;re making sure this device is ready to test.</p>
             </StepTitle>
@@ -403,7 +363,7 @@ export default function CheckInPage() {
           </>
         );
 
-      case 5:
+      case 4:
         return (
           <>
             <StepTitle title="Your Testing Room">
@@ -427,7 +387,7 @@ export default function CheckInPage() {
           </>
         );
 
-      case 6:
+      case 5:
         return (
           <>
             <StepTitle title="About the Test">
@@ -460,7 +420,7 @@ export default function CheckInPage() {
           </>
         );
 
-      case 7:
+      case 6:
         return (
           <>
             <StepTitle title="Test Tools">
@@ -487,7 +447,7 @@ export default function CheckInPage() {
           </>
         );
 
-      case 8:
+      case 7:
         return (
           <>
             <StepTitle title="Test Directions">
@@ -513,7 +473,7 @@ export default function CheckInPage() {
           </>
         );
 
-      case 9:
+      case 8:
         return (
           <>
             <StepTitle title="Staying in the Test">
@@ -536,7 +496,7 @@ export default function CheckInPage() {
           </>
         );
 
-      case 10:
+      case 9:
         return (
           <>
             <StepTitle title="You&rsquo;re All Set">
@@ -547,12 +507,7 @@ export default function CheckInPage() {
             </StepTitle>
             <div className="mx-auto mt-10 flex max-w-md flex-col items-center gap-4 rounded-xl border border-gray-200 bg-white px-7 py-8">
               <CheckCircle className="h-10 w-10 text-cb-green" />
-              <p className="text-center text-[16px]">
-                {firstName} {lastName}
-                <span className="mt-1 block text-[14px] text-cb-gray">
-                  Room code {roomCode || "—"}
-                </span>
-              </p>
+              <p className="text-center text-[16px]">{firstName} {lastName}</p>
             </div>
           </>
         );

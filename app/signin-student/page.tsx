@@ -5,15 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 function BluebookMark({ className = "h-8 w-8" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" className={className} fill="white">
-      <path
-        d="M17 1L20.2 11.6L31 15L20.2 18.4L17 29L13.8 18.4L3 15L13.8 11.6Z"
-        transform="rotate(-16 17 15)"
-      />
-      <path d="M8 13.5L10.2 18.7L15.5 21L10.2 23.3L8 29.5L5.8 23.3L0.5 21L5.8 18.7Z" />
-    </svg>
-  );
+  return <img src="/bluebook-star.png" alt="" className={`${className} object-contain`} />;
 }
 
 function LaptopIcon() {

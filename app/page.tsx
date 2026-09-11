@@ -1,15 +1,7 @@
 import Link from "next/link";
 
 function BluebookMark({ className = "h-8 w-8" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" className={className} fill="white">
-      <path
-        d="M17 1L20.2 11.6L31 15L20.2 18.4L17 29L13.8 18.4L3 15L13.8 11.6Z"
-        transform="rotate(-16 17 15)"
-      />
-      <path d="M8 13.5L10.2 18.7L15.5 21L10.2 23.3L8 29.5L5.8 23.3L0.5 21L5.8 18.7Z" />
-    </svg>
-  );
+  return <img src="/bluebook-star.png" alt="" className={`${className} object-contain`} />;
 }
 
 function LaptopIcon() {
@@ -54,89 +46,12 @@ function CaretDown() {
 
 function BackgroundArt() {
   return (
-    <>
-      <svg
-        viewBox="0 0 200 200"
-        className="pointer-events-none absolute -left-10 bottom-[-40px] h-[420px] w-[420px] opacity-[0.12]"
-        fill="white"
-        aria-hidden="true"
-      >
-        <path d="M92 8L100 71L163 79L104 92L175 112L112 121L125 184L83 137L33 167L62 112L8 100L62 87L37 29L88 65Z" />
-      </svg>
-
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-64 overflow-hidden opacity-[0.16]"
-        aria-hidden="true"
-      >
-        <svg viewBox="0 0 1470 260" className="h-full w-full" fill="none">
-          {/* device / tablet mockup */}
-          <g transform="translate(50,50)" stroke="white" strokeWidth="4">
-            <rect x="0" y="0" width="220" height="150" rx="10" />
-            <circle cx="30" cy="26" r="6" fill="white" stroke="none" />
-            <path d="M30 60h160M30 88h160M30 116h110" strokeLinecap="round" />
-          </g>
-
-          {/* checklist notepad */}
-          <g transform="translate(340,20)" stroke="white" strokeWidth="4">
-            <rect x="0" y="0" width="170" height="190" rx="12" />
-            <circle cx="30" cy="55" r="9" />
-            <path d="M52 55h90" strokeLinecap="round" />
-            <circle cx="30" cy="95" r="9" />
-            <path d="M52 95h90" strokeLinecap="round" />
-            <circle cx="30" cy="135" r="9" />
-            <path d="M52 135h90" strokeLinecap="round" />
-          </g>
-
-          {/* calculator */}
-          <g transform="translate(600,60)" stroke="white" strokeWidth="4">
-            <rect x="0" y="0" width="130" height="150" rx="12" />
-            <rect x="18" y="18" width="94" height="34" rx="4" fill="white" stroke="none" />
-            {[0, 1, 2].map((r) =>
-              [0, 1, 2, 3].map((c) => (
-                <rect
-                  key={`${r}-${c}`}
-                  x={18 + c * 26}
-                  y={70 + r * 26}
-                  width="16"
-                  height="16"
-                  rx="3"
-                  fill="white"
-                  stroke="none"
-                />
-              ))
-            )}
-          </g>
-
-          {/* open book */}
-          <g transform="translate(800,80)" stroke="white" strokeWidth="4" strokeLinejoin="round">
-            <path d="M95 20C70 5 35 5 5 20v110c30-15 65-15 90 0z" />
-            <path d="M95 20c25-15 60-15 90 0v110c-30-15-65-15-90 0z" />
-            <path d="M95 20v110" />
-          </g>
-
-          {/* clock / stopwatch */}
-          <g transform="translate(1010,55)" stroke="white" strokeWidth="4">
-            <rect x="40" y="-6" width="26" height="12" rx="4" fill="white" stroke="none" />
-            <circle cx="53" cy="80" r="72" />
-            <path d="M53 40v42l30 20" strokeLinecap="round" strokeLinejoin="round" />
-          </g>
-
-          {/* building */}
-          <g transform="translate(1160,60)" stroke="white" strokeWidth="4" strokeLinejoin="round">
-            <path d="M0 60L75 10L150 60" />
-            <path d="M10 60v90h140V60" />
-            <path d="M45 150V80M75 150V80M105 150V80" />
-            <path d="M0 150h150" strokeLinecap="round" />
-          </g>
-
-          {/* document + pencil */}
-          <g transform="translate(1330,50)" stroke="white" strokeWidth="4" strokeLinejoin="round">
-            <path d="M0 20h110M0 55h110M0 90h70" strokeLinecap="round" />
-            <path d="M20 130l70-70 20 20-70 70-26 6z" />
-          </g>
-        </svg>
-      </div>
-    </>
+    <img
+      src="/signin-illustration.png"
+      alt=""
+      className="pointer-events-none absolute inset-x-0 -bottom-16 w-full object-contain object-bottom opacity-25"
+      aria-hidden="true"
+    />
   );
 }
 

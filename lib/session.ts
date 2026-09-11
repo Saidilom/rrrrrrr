@@ -3,7 +3,6 @@
 export interface StudentSession {
   firstName: string;
   lastName: string;
-  roomCode: string;
   startCode: string;
   startedAt: number;
 }

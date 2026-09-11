@@ -467,9 +467,6 @@ export default function TestEngine() {
                   {fmt(breakSecondsLeft)}
                 </p>
               </div>
-              <button className="cb-btn-yellow px-10" onClick={startNextModule}>
-                Resume Testing
-              </button>
             </div>
 
             <div className="max-w-2xl">
@@ -477,8 +474,7 @@ export default function TestEngine() {
                 Take a Break: Do Not Close Your Device
               </h1>
               <p className="mt-6 text-[17px] leading-relaxed text-white/90">
-                After the break, a <strong>Resume Testing Now</strong> button
-                will appear and you&rsquo;ll start the next section.
+                The next section will start automatically when the break ends.
               </p>
               <p className="mt-6 text-[17px] font-bold">
                 Follow these rules during the break:
