@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { MODULES } from "@/lib/test";
-import { clearAll, saveSession } from "@/lib/session";
 
 const totalQuestions = MODULES.reduce((n, m) => n + m.questions.length, 0);
 
@@ -101,20 +99,6 @@ const dateStr = today.toLocaleDateString("en-US", {
 const firstName = "Behruz";
 
 export default function Home() {
-  const router = useRouter();
-
-  function beginTest() {
-    clearAll();
-    saveSession({
-      firstName,
-      lastName: "",
-      roomCode: "000000",
-      startCode: "000000",
-      startedAt: Date.now(),
-    });
-    router.push("/test");
-  }
-
   return (
     <main className="min-h-screen bg-white">
       <header className="bg-cb-chrome px-8 pb-8 pt-7 sm:px-14">
@@ -214,12 +198,12 @@ export default function Home() {
               <CheckCircleFilled />
               <span className="font-semibold">It&rsquo;s time to check in.</span>
             </div>
-            <button
-              onClick={beginTest}
+            <Link
+              href="/checkin"
               className="rounded-full border border-black bg-cb-yellow px-8 py-3 text-[15px] font-medium text-black transition hover:bg-cb-yellowhover"
             >
               Check In Now
-            </button>
+            </Link>
           </div>
         </div>
       </div>
