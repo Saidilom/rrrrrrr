@@ -87,24 +87,6 @@ export default function SignInStudent() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#3D4EDD]">
-      <div className="flex h-11 shrink-0 items-center justify-between bg-[#111124] px-4 text-white">
-        <div className="flex items-center gap-2 text-[13px] font-medium">
-          <BluebookMark className="h-4 w-4" />
-          Bluebook
-        </div>
-        <div className="flex items-center gap-4 text-white/80">
-          <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none">
-            <path d="M5 19h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none">
-            <rect x="4" y="4" width="16" height="16" rx="1.5" stroke="currentColor" strokeWidth="2" />
-          </svg>
-          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none">
-            <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-        </div>
-      </div>
-
       <main className="relative flex flex-1 flex-col items-center overflow-hidden px-6 py-8">
         <Link
           href="#"
